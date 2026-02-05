@@ -1,26 +1,28 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         ::::::::             #
-#    Readme                                             :+:    :+:             #
-#                                                      +:+                     #
-#    By: Ceren Kurt <cerkurt@student.codam.nl>        +#+                      #
-#                                                    +#+                       #
-#    Created: 2025/11/27 16:19:20 by cerkurt       #+#    #+#                  #
-#    Updated: 2025/12/02 11:56:24 by cerkurt       ########   odam.nl          #
-#                                                                              #
-# **************************************************************************** #
+*This project has been created as part of the 42 curriculum by **cerkurt***.
 
-#******************************************************************************#
-#                             PUSH_SWAP README FILE                            #
-#******************************************************************************#
+---
 
-This project has been created as part of the 42 curriculum by <cerkurt>.
+## Index
 
+- [Testing Command](#testing-command)
+- [Description](#description)
+- [Allowed Operations](#allowed-operations)
+- [General Requirements](#general-requirements)
+- [Benchmark Requirements](#benchmark-requirements-operation-count)
+- [Bonus (checker)](#bonus-checker)
+- [Algorithm Overview](#algorithm-overview)
+  - [Rank Mapping](#1-rank-mapping)
+  - [Small Stack Handling](#2-small-stack-handling)
+  - [Passport Push Strategy (A → B)](#3-passport-push-strategy-a--b)
+  - [Reinsertion Phase (B → A)](#4-reinsertion-phase-b--a)
+  - [Final Rotation](#5-final-rotation)
+- [Resources](#resources)
 
-#******************************************************************************#
-#                               TESTING COMMAND                                #
-#******************************************************************************#
+---
 
+## Testing Command
+
+```bash
 ARG=$(python3 - <<'PY'
 import random
 n = 500
@@ -30,220 +32,204 @@ while len(s) < n:
 print(" ".join(map(str, s)))
 PY
 )
+
 ./push_swap $ARG | wc -l
 ./push_swap $ARG | ./checker $ARG
+```
 
-#******************************************************************************#
-#                                 DESCRIPTION                                  #
-#******************************************************************************#
+---
 
-Goal:
-	• Create a  --program-- "push_swap" that prints the shortest possible
-	sequence of stack operations to sort a list of unique integers in ascending
-	order.
-	• Only the allowed operations may be used.
-	
-Operate on two stacks:
-	• "Stack a" → initially filled with integers
-	• "Stack b" → initially empty
+## Description
 
-#******************************************************************************#
+**Goal**
 
-#******************************************************************************#
-#                              ALLOWED OPERATIONS                              #
-#******************************************************************************#
+Create a program called `push_swap` that prints the shortest possible sequence
+of stack operations to sort a list of unique integers in ascending order.
 
-"SWAP"
-	sa  : Swap top two elements of stack a
-	sb  : Swap top two elements of stack b
-	ss  : Perform sa and sb simultaneously
+Only the allowed operations may be used.
 
-"PUSH"
-	pa  : Push top of b onto top of a
-	pb  : Push top of a onto top of b
+**Stacks**
 
-"ROTATE (UP)"
-	ra  : Shift up all elements of a (first becomes last)
-	rb  : Shift up all elements of b
-	rr  : Perform ra and rb simultaneously
+- **Stack A** → initially filled with integers  
+- **Stack B** → initially empty  
 
-"REVERSE ROTATE (DOWN)"
-	rra : Shift down all elements of a (last becomes first)
-	rrb : Shift down all elements of b
-	rrr : Perform rra and rrb simultaneously
+---
 
-#******************************************************************************#
+## Allowed Operations
 
-#******************************************************************************#
-#                             GENERAL REQUIREMENTS                             #
-#******************************************************************************#
+### Swap
+- `sa` — swap top two elements of stack A  
+- `sb` — swap top two elements of stack B  
+- `ss` — perform `sa` and `sb` simultaneously  
 
-Allowed functions:
-	• read, write, malloc, free, exit
-	• ft_printf (or equivalent coded by you)
+### Push
+- `pa` — push top of B onto A  
+- `pb` — push top of A onto B  
 
-Global variables:
-	• Forbidden
+### Rotate (Up)
+- `ra` — rotate stack A  
+- `rb` — rotate stack B  
+- `rr` — rotate A and B  
 
-Program behavior:
-	• Takes integer arguments (first argument is top of stack a)
-	• Must output a valid sequence of operations to sort stack a
-	• Instructions must each appear on their own line
-	• Nothing else should be printed
-	• No output when no arguments are given
+### Reverse Rotate (Down)
+- `rra` — reverse rotate stack A  
+- `rrb` — reverse rotate stack B  
+- `rrr` — reverse rotate A and B  
 
-Error handling:
-	• Must print "Error\n" on stderr when:
-	• Non-integer input
-	• Overflow / underflow
-	• Duplicate values
-	• Invalid formatting
+---
 
-#******************************************************************************#
+## General Requirements
 
-#******************************************************************************#
-#                      BENCHMARK REQUIREMENTS (OP COUNT)                       #
-#******************************************************************************#
+**Allowed functions**
+- `read`, `write`, `malloc`, `free`, `exit`
+- `ft_printf` (or equivalent)
 
-To achieve maximum score (100%):
-	• 100 random numbers  →  fewer than 700 operations
-	• 500 random numbers  →  fewer than 5500 operations
+**Restrictions**
+- Global variables are forbidden
 
-Minimum validation (80%) is achieved with ANY ONE set:
+**Program behavior**
+- Takes integers as arguments (first argument is top of stack A)
+- Outputs only valid operations, one per line
+- No output if no arguments are given
 
-Option A:
-	• 100 < 1100 operations
-	• 500 < 8500 operations
+**Error handling**
 
-Option B:
-	• 100 < 700 operations
-	• 500 < 11500 operations
+Print `Error\n` to `stderr` if:
+- Input is not an integer
+- Integer overflow / underflow occurs
+- Duplicate values exist
+- Invalid formatting is detected
 
-Option C:
-	• 100 < 1300 operations
-	• 500 < 5500 operations
+---
 
-#******************************************************************************#
+## Benchmark Requirements (Operation Count)
 
-#******************************************************************************#
-#                         BONUS REQUIREMENTS (checker)                         #
-#******************************************************************************#
+### 100% Score
+- 100 numbers → fewer than **700** operations  
+- 500 numbers → fewer than **5500** operations  
 
-Program name:
-	• checker
+### Minimum Validation (80%) — any one set
 
-Behavior:
-	• Reads initial stack a from arguments
-	• Reads instructions from standard input (one per line)
-	• Executes all instructions on stacks a and b
+**Option A**
+- 100 < 1100  
+- 500 < 8500  
 
-After execution:
-	• If a is sorted AND b is empty → print "OK"
-	• Otherwise → print "KO"
+**Option B**
+- 100 < 700  
+- 500 < 11500  
 
-Error cases must print "Error\n" to stderr:
-	• Non-integer inputs
-	• Overflow / underflow
-	• Duplicate values
-	• Invalid / unknown instruction name
-	• Incorrect formatting
+**Option C**
+- 100 < 1300  
+- 500 < 5500  
 
-#******************************************************************************#
+---
 
-#******************************************************************************#
-#                              ALGORITHM OVERVIEW                              #
-#******************************************************************************#
+## Bonus (checker)
 
-To optimize sorting and reduce the number of operations, my algorithm uses
-a rank-based approach combined with *passport approach pushing*. I used circular
-array logic and implementation with the stacks, because I found it interesting
-to work with. Yes, it caused different bugs than I have faced before but in
-general concept it was interesting to work on and was fun too.
+**Program name:** `checker`
 
-1) Rank Mapping
-   • All input values are first scanned and *converted to ranks from 0 to N-1*.
-   		Functions used;
-		* index_to_ranks_instack(t_stack *stack)
-		* sort_integer_array(int *tab, unsigned int size)
-		* find_index(int *sorted_table, unsigned int size, int val)
-		* position_to_value(t_stack *stack, int pos)
-   • Rank 0 represents the smallest value, rank N-1 the largest.
-   • This scanning is internal only and does NOT change the logical order. Raw
-   integer values are not used later in sorting algorithm once they are all
-   converted into ranks.
-   • It allows simpler comparisons and predictable sorting behavior.
+**Behavior**
+- Reads initial stack A from arguments
+- Reads instructions from `stdin`
+- Executes instructions on stacks A and B
 
-2) Small Stack Handling
-   • Special optimized cases exist for stack sizes of 2, 3, 4, and 5.
-   • These cases are sorted directly using minimal operations.
-		Functions used;
-		* sort_two_a(t_stack *a)
-		* sort_three_a(t_stack *a)
-		* sort_four_a(t_stack *a, t_stack *b)
-		* sort_five_a(t_stack *a, t_stack *b)
+**Result**
+- Prints `OK` if stack A is sorted and B is empty
+- Prints `KO` otherwise
 
-3) Passport Approach Push Strategy (A -> B)
-   • For larger inputs, elements are pushed from stack A to stack B based on
-   *if they have a passport in the given rank push constrains or not*. We can
-   simply refer these as kind of "frame" or "boundry" or "limit". So we check
-   *for each rank "Are you inside this limit to be pushed to B or not?", "Do*
-   *you have a passport or not?"*
-   • This passport represents a range of ranks (e.g. 0–19, 20–39, ...).
-   • This keeps stack B partially ordered and reduces reinsertion cost when I
-   want to insert back from B to A.
-   • Logic is to keep small ranks at the bottom of the B, thats why we start
-   with small frame to search in.
-   • When we keep the small numbers at the bottom of the B, while we are pushing
-   back to A, A will be almost perfectly sorted and will require minimum
-   operations to sort finally.
-		Functions used:
-		* organize_b(t_stack *a, t_stack *b)
-		* define_pass(t_pass *f, int size)
-		* scan_push_and_pass_update(t_stack *a, t_stack *b, t_pass *f)
-		* update_pass(t_pass *f)
-		* position_to_value(t_stack *a, int pos)
-		* push_a_to_b(t_stack *a, t_stack *b)
-		* rotate_a(t_stack *a)
+**Errors**
+- Invalid input
+- Invalid instruction
+- Duplicate values
+- Overflow / underflow
 
-4) Reinsertion Phase (B -> A)
-   • Elements are moved back from stack B to stack A.
-   • For each element, the *cheapest rotation cost* is calculated.
-   • Combined rotations (rr / rrr) are used whenever possible to reduce cost.
-		Functions used;
-		* cheapest_move(t_stack *a, t_stack *b)
-		* insert_in_a(t_stack *a, int rank)
-		* bring_to_top_cost(int pos, int size)
-		* combined_bring_to_top_cost(int cost_a, int cost_b)
-		* apply_move_b_to_a(t_stack *a, t_stack *b, t_rocost cost)
-		* apply_mutual_rotations(...)
-		* leftover_rotations_a(...)
-		* leftover_rotations_b(...)
-		* push_b_to_a(t_stack *b, t_stack *a)
+---
 
-5) Final Rotation
-   • After all elements are back in stack A, stack A is rotated so that rank 0
-   is at the top.
-   • This results in a fully sorted stack in ascending order.
-		Functions used;
-		* final_rotate_a(t_stack *a)
-		* value_to_position(t_stack *a, int value)
-		* bring_to_top_cost(int pos, int size)
-		* rotate_a(t_stack *a)
-		* reverse_rotate_a(t_stack *a)
+## Algorithm Overview
 
-#******************************************************************************#
-#            		              RESOURCES			        	               #
-#******************************************************************************#
+The algorithm uses **rank-based sorting** combined with a **passport (frame)
+push strategy**, implemented using **circular arrays**.
 
-This project is created on the logic of circular arrays as base.
+### 1. Rank Mapping
 
-https://www.geeksforgeeks.org/dsa/circular-array/
-https://stackoverflow.com/questions/27892589/c-circular-array
-https://www.geeksforgeeks.org/dsa/find-the-index-in-a-circular-array-from-which-prefix-sum-is-always-non-negative/
-https://stackoverflow.com/questions/7693992/search-in-circular-array
-https://stackoverflow.com/questions/1452545/shifting-a-circular-array
-https://stackoverflow.com/questions/42603730/algorithms-circular-array-rotation
+All input values are converted to ranks from `0` to `N - 1`.
 
-################################################################################
-##                               END OF FILE                                  ##
-################################################################################
+- Rank `0` → smallest value  
+- Rank `N - 1` → largest value  
+
+Raw integer values are no longer used after this step.
+
+**Functions used**
+- `index_to_ranks_instack`
+- `sort_integer_array`
+- `find_index`
+- `position_to_value`
+
+---
+
+### 2. Small Stack Handling
+
+Special optimized logic for small stack sizes.
+
+**Functions used**
+- `sort_two_a`
+- `sort_three_a`
+- `sort_four_a`
+- `sort_five_a`
+
+---
+
+### 3. Passport Push Strategy (A → B)
+
+Elements are pushed from stack A to B if their rank falls within a defined
+frame (passport range).
+
+This keeps stack B partially ordered and minimizes reinsertion cost.
+
+**Functions used**
+- `organize_b`
+- `define_pass`
+- `scan_push_and_pass_update`
+- `update_pass`
+- `push_a_to_b`
+- `rotate_a`
+
+---
+
+### 4. Reinsertion Phase (B → A)
+
+Elements are moved back from B to A using the cheapest rotation cost.
+
+Combined rotations (`rr`, `rrr`) are used when possible.
+
+**Functions used**
+- `cheapest_move`
+- `insert_in_a`
+- `bring_to_top_cost`
+- `combined_bring_to_top_cost`
+- `apply_move_b_to_a`
+- `push_b_to_a`
+
+---
+
+### 5. Final Rotation
+
+After reinsertion, stack A is rotated so that rank `0` is at the top.
+
+This results in a fully sorted stack.
+
+**Functions used**
+- `final_rotate_a`
+- `value_to_position`
+- `rotate_a`
+- `reverse_rotate_a`
+
+---
+
+## Resources
+
+- https://www.geeksforgeeks.org/dsa/circular-array/
+- https://stackoverflow.com/questions/27892589/c-circular-array
+- https://stackoverflow.com/questions/7693992/search-in-circular-array
+- https://stackoverflow.com/questions/1452545/shifting-a-circular-array
+- https://stackoverflow.com/questions/42603730/algorithms-circular-array-rotation
