@@ -14,7 +14,7 @@
 
 /**
  * @name
- * @brief function write error to stdout. 
+ * @brief function writes error to stdout. 
  */
 void	error_exit(void)
 {
@@ -24,7 +24,7 @@ void	error_exit(void)
 
 /**
  * @name
- * @brief function write error to stdout after freeing the allocated stuff.
+ * @brief function writes error to stdout after freeing the allocated stuff.
  */
 void	free_and_error_exit(char **values, int arr_size)
 {
@@ -34,8 +34,8 @@ void	free_and_error_exit(char **values, int arr_size)
 
 /**
  * @name
- * @brief function makes all the free process at one time. freeing the value,
- * freeing the array and doing error exit.
+ * @brief The function makes all the free processes at one time. freeing the value,
+ * freeing the array, and doing an error exit.
  */
 void	ultimate_free(char **values, int *val, int size)
 {
@@ -46,7 +46,7 @@ void	ultimate_free(char **values, int *val, int size)
 
 /**
  * @name
- * @brief function that frees the value and exots with error.
+ * @brief function that frees the value and exits with an error.
  */
 void	value_free_and_exit(int *val)
 {
@@ -56,7 +56,7 @@ void	value_free_and_exit(int *val)
 
 /**
  * @name
- * @brief helper function to save some lines in main. frees both stacks.
+ * @brief helper function to save some lines in main. Frees both stacks.
  */
 void	free_in_main(t_stack *a, t_stack *b)
 {
