@@ -29,8 +29,8 @@ static int	array_size(char **values)
 
 /**
  * @name
- * @a function checks for the duplicated while also filling the array with the
- * given values. if there is any duplicate, we return -1 and later we use this
+ * @a function checks for duplicates while also filling the array with the
+ * given values. If there is any duplicate, we return -1, and later we use this
  * result to validate that the inputs are unique or not.
  */
 static int	array_fill_dup_check(int *arr, char **values, int n)
@@ -60,10 +60,10 @@ static int	array_fill_dup_check(int *arr, char **values, int n)
 /**
  * @name
  * @brief this functions handles the argument given between the " ". using our
- * ft_split we split the given string into sub strings, and check if we ever
+ * ft_split, we split the given string into substrings, and check if we ever
  * have any duplicates.
  * @param s is the string given between " ".
- * @param arr_size is the lenght of the array, calculated with the helper func.
+ * @param arr_size is the length of the array, calculated with the helper func.
  */
 int	*single_argument_parsing(const char *s, int *arr_size)
 {
@@ -87,13 +87,13 @@ int	*single_argument_parsing(const char *s, int *arr_size)
 
 /**
  * @name
- * @brief this function checks duplicates internally, after turning every given
- * argv into valid values using atoi conversion and compares each new value with
- * the previous ones. if any match we free the value written so far and exit
+ * @brief This function checks duplicates internally, after turning every given
+ * argv into valid values using atoi conversion, and compares each new value with
+ * the previous ones. If any match, we free the value written so far and exit
  * with the error path.
- * @param argc is, obvious. the argc.
+ * @param argc is obvious. the argc.
  * @param argv is again pretty much clear.
- * @param arr_size is the lenght of the array, calculated with the helper func.
+ * @param arr_size is the length of the array, calculated with the helper func.
  */
 int	*multiple_arguments_parsing(int argc, char **argv, int *arr_size)
 {
@@ -126,10 +126,10 @@ int	*multiple_arguments_parsing(int argc, char **argv, int *arr_size)
 
 /**
  * @name
- * @brief this function checks if a is already sorted at the start or not. we do
- * this simply comparing element with the next one. if it is sorted we return 1,
- * if not we return 0 and based on this result we start sorting the a or do not
- * touch it at all.
+ * @brief This function checks if a is already sorted at the start or not. We do
+ * this simply by comparing the element with the next one. If it is sorted, we
+ * return 1; if not, we return 0, and based on this result, we start sorting
+ * the array or do not touch it at all.
  */
 int	is_a_sorted(t_stack *a)
 {
