@@ -160,10 +160,11 @@ All input values are converted to ranks from `0` to `N - 1`.
 Raw integer values are no longer used after this step.
 
 **Functions used**
-- `index_to_ranks_instack`
+- `values_to_ranks`
 - `sort_integer_array`
 - `find_index`
 - `position_to_value`
+- `fill_stacks`
 
 ---
 
